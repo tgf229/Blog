@@ -17,36 +17,35 @@ A中包含B，可传递props，也可传递state。
 ```javascript
 import B from './B';
 export default class A extends Component {
-static defaultProps = {
-name: '涂高峰',
-}; 
-constructor(props){
-super(props);
+    static defaultProps = {
+        name: '涂高峰',
+    }; 
+    constructor(props){
+        super(props);
+        this.state = {
+            a:'1',
+        }
+    }
 
-this.state = {
-a:'1',
-}
-}
+    onClick(){
+        this.setState({a:'2'});
+    }
 
-onClick(){
-this.setState({a:'2'});
-}
-
-render() {
-return (
-<View 
-style={styles.container}>
-<Text>我是A</Text>
-<B s={this.state.a} p={this.props.name} />
-<TouchableHighlight
-onPress={() => this.onClick()}
-underlayColor='#fcfcfc'
-style={{backgroundColor:'#ff902d',width:200,height:40,justifyContent:'center',alignItems:'center'}}>
-<Text>点击改变A的state</Text>
-</TouchableHighlight>
-</View>
-);
-}
+    render() {
+        return (
+        <View 
+            style={styles.container}>
+            <Text>我是A</Text>
+            <B s={this.state.a} p={this.props.name} />
+            <TouchableHighlight
+                onPress={() => this.onClick()}
+                underlayColor='#fcfcfc'
+                style={{backgroundColor:'#ff902d',width:200,height:40,justifyContent:'center',alignItems:'center'}}>
+                <Text>点击改变A的state</Text>
+            </TouchableHighlight>
+        </View>
+        );
+    }
 }
 ```
 
@@ -55,10 +54,10 @@ style={{backgroundColor:'#ff902d',width:200,height:40,justifyContent:'center',al
 A打开B，类似Android的startActivity()，使用Navigator即可简单的在打开B的同时传递参数。
 ``` javascript
 this.props.navigator.push({
-component:B,
-params:{
-x:'11',
-}
+    component:B,
+    params:{
+        x:'11',
+    }
 });
 ```
 但是，Navigator中使用pop()退出时无法传参，那项目中遇到需要在B中刷新A中的数据时应该如何操作呢？
@@ -70,17 +69,17 @@ this.props.navigator.pop();
 方案一：A push 到B 的时候，将A的this通过props传递至B。
 ```javascript
 refreshByData(){
-this.setState({a:'2'});
-console.log('xxx')
+    this.setState({a:'2'});
+    console.log('xxx')
 }
 
 onClick(){
-this.props.navigator.push({
-component:B,
-params:{
-objA:this,
-}
-});
+    this.props.navigator.push({
+        component:B,
+        params:{
+            objA:this,
+        }
+    });
 }
 ```
 当B pop的时候，在B中用A对象setState重新render A。
@@ -93,23 +92,23 @@ this.props.navigator.pop();
 方案二：A定义方法 refreshByData(){}，当A push到B的时候传参params:{refreshA:this.refreshByData}
 ```javascript
 refreshByData(){
-hello.setState({a:'2'});
-console.log('xxx')
+    hello.setState({a:'2'});
+    console.log('xxx')
 }
 
 onClick(){
-this.props.navigator.push({
-component:B,
-params:{
-refreshA:hello.refreshByData,
-}
-});
+    this.props.navigator.push({
+        component:B,
+        params:{
+            refreshA:hello.refreshByData,
+        }
+    });
 }
 ```
 当B pop之前，在B中this.props.refreshA();
 ```javascript
 onClick(){
-this.props.refreshA();
-this.props.navigator.pop();
+    this.props.refreshA();
+    this.props.navigator.pop();
 }
 ```

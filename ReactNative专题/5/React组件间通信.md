@@ -9,7 +9,7 @@
 ###2)分析
 ---
 ####2.1)A包含B
----
+
 A中包含B，可传递props，也可传递state。
 若传递的是state，则当A setState()的时候，B中的数据内容也会更新。
 这在某些场景下很实用，如：A页面中包含顶部Banner，中间静态按钮和底部ListView。 
@@ -50,7 +50,7 @@ export default class A extends Component {
 ```
 
 ####2.2)A打开B
----
+
 A打开B，类似Android的startActivity()，使用Navigator即可简单的在打开B的同时传递参数。
 ``` javascript
 this.props.navigator.push({
@@ -112,3 +112,6 @@ onClick(){
     this.props.navigator.pop();
 }
 ```
+
+###3) 进阶Redux
+http://cn.redux.js.org/index.html
